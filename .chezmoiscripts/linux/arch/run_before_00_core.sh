@@ -2,20 +2,21 @@
 
 # Format: ["command_to_check"]="package_name"
 declare -A install_packages=(
-  [micro]="micro"
-  [ttf-jetbrains-mono-nerd]="ttf-jetbrains-mono-nerd"
-  [starship]="starship"
-  [eza]="eza"
-  [bat]="bat"
-  [zoxide]="zoxide"
-  [fzf]="fzf"
+  [chezmoi]="chezmoi"
+  [git]="git"
+  [ssh]="openssh"
+)
+
+# Packages to enabel
+enable_packages=(
+  "sshd"
 )
 
 # Packages to remove (just package names)
 remove_packages=()
 
 echo "--------------------------------------------------"
-echo "[INSTALL] Installing terminal tools..."
+echo "[INSTALL] Installing core tools..."
 echo ""
 
 # Install packages
@@ -29,6 +30,12 @@ for cmd in "${!install_packages[@]}"; do
   fi
 done
 
+# Activate packages
+for service in "${enable_packages[@]}"; do
+  echo "[SERVICE] Enabling and starting $service..."
+  sudo systemctl enable --now "$service".service
+done
+
 # Remove unwanted packages
 for pkg in "${remove_packages[@]}"; do
   if pacman -Q "$pkg" &>/dev/null; then
@@ -40,4 +47,4 @@ for pkg in "${remove_packages[@]}"; do
 done
 
 echo ""
-echo "[SUCCESS] Terminal tools installed successfully!"
+echo "[SUCCESS] Core tools installed successfully!"
