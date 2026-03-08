@@ -32,6 +32,7 @@ done
 
 # Activate packages
 for service in "${enable_packages[@]}"; do
+  echo ""
   echo "[SERVICE] Enabling and starting $service..."
   sudo systemctl enable --now "$service".service
 done
