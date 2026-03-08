@@ -8,3 +8,9 @@
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
+
+# My aliases
+alias cm='chezmoi'
+
+# Starship config
+eval "$(starship init bash)"
