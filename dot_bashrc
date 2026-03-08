@@ -11,6 +11,14 @@ PS1='[\u@\h \W]\$ '
 
 # My aliases
 alias cm='chezmoi'
+alias ls='eza -l -h -a --smart-group --total-size --no-user --git'
+alias cat='bat'
 
 # Starship config
 eval "$(starship init bash)"
+
+# Zoxide config
+eval "$(zoxide init bash --cmd cd)"
+
+# Fzf config
+eval "$(fzf --bash)"
