@@ -8,19 +8,13 @@ These are my personal dotfiles managed with [chezmoi](https://www.chezmoi.io/), 
 
 ## Getting Started
 
-### 1. Install chezmoi
+### 1. Install and apply dotfiles
 
 ```bash
-sudo pacman -S git chezmoi
-````
-
-### 2. Initialize chezmoi with this repo
-
-```bash
-chezmoi init --apply git@github.com:HappySven06/dotfiles.git
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply HappySven06
 ```
 
-### 3. Enjoy a fully configured system
+### 2. Enjoy a fully configured system
 
 * Dotfiles, applications, and desktop environment will be applied automatically.
 * You can update your system anytime by running:
