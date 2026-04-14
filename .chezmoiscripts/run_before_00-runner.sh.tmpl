@@ -1,0 +1,69 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/logging.sh"
+
+# 1. INITIALIZATION - loads config, detects distro, exports variables
+log_debug "=== Phase 1: Initialization ==="
+
+# CONFIG - Use chezmoi templates to inject values
+export PROFILE="{{ .profile | default "desktop" }}"
+export YES="{{ .yes | default "false" }}"
+export DRY_RUN="{{ .dry_run | default "false" }}"
+export CONFIG_FILE="{{ .chezmoi.sourceDir }}/.chezmoi.yaml.tmpl"
+
+# DETECT DISTRO - identify the Linux distribution
+detect_distro() {
+  log_debug "Detecting Linux distribution..."
+  if [[ -f /etc/os-release ]]; then
+    . /etc/os-release
+    echo "$ID"
+  else
+    log_warn "Could not find /etc/os-release, returning 'unknown'"
+    echo "unknown"
+  fi
+}
+
+# Initialize and export detected distro
+export DISTRO=$(detect_distro)
+export CHEZMOI_DISTRO="$DISTRO"
+
+# Log initialization complete with config
+log_debug "Initializing dotfiles runner..."
+log_debug "Profile: $PROFILE"
+log_debug "Dry run: $DRY_RUN"
+log_debug "Config file: $CONFIG_FILE"
+log_info "Detected distro: $DISTRO"
+log_info "Selected profile: $PROFILE"
+
+# Verify required tools are available
+if ! command -v yq &>/dev/null; then
+  log_error "yq is required!"
+  exit 1
+fi
+log_debug "yq is available"
+
+# 2. BUILD EXECUTION PLAN - resolves dependencies and builds ordered module list
+log_debug "=== Phase 2: Build Execution Plan ==="
+FINAL_MODULES=()
+if ! FINAL_MODULES=($("$SCRIPT_DIR/lib/runner/build-plan.sh" 2>&1)); then
+  log_error "Failed to build execution plan"
+  exit 1
+fi
+
+# 3. CONFIRMATION - checks dry-run flag and requests user confirmation
+log_debug "=== Phase 3: Confirmation ==="
+if ! "$SCRIPT_DIR/lib/runner/confirm.sh"; then
+  log_info "Execution halted by user or dry-run mode"
+  exit 0
+fi
+
+# 4. EXPORT MODULES - prepare final state for execution
+log_debug "=== Phase 4: Export Modules ==="
+export CHEZMOI_MODULES=" ${FINAL_MODULES[*]} "
+
+log_info "Modules exported to CHEZMOI_MODULES: ${#FINAL_MODULES[@]} modules"
+log_debug "CHEZMOI_MODULES=$CHEZMOI_MODULES"
+
+log_info "Orchestration complete - ready for module execution"

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+[[ ! " $CHEZMOI_MODULES " =~ " core " ]] && exit 0
+
+source "{{ .chezmoi.sourceDir }}/.chezmoiscripts/lib/package.sh"
+
+echo "[MODULE] core"
+
+# Format: ["command_to_check"]="package_name"
+declare -A packages=(
+  [chezmoi]="chezmoi"
+  [git]="git"
+  [ssh]="openssh"
+)
+
+services=()
+
+install_packages packages
+enable_services "${services[@]}"

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+[[ ! " $CHEZMOI_MODULES " =~ " terminal " ]] && exit 0
+
+source "{{ .chezmoi.sourceDir }}/.chezmoiscripts/lib/package.sh"
+
+echo "[MODULE] terminal"
+
+# Format: ["command_to_check"]="package_name"
+declare -A install_packages=(
+  [micro]="micro"
+  [ttf-jetbrains-mono-nerd]="ttf-jetbrains-mono-nerd"
+  [starship]="starship"
+  [eza]="eza"
+  [bat]="bat"
+  [zoxide]="zoxide"
+  [fzf]="fzf"
+)
+
+services=()
+
+install_packages packages
+enable_services "${services[@]}"

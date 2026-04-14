@@ -1,0 +1,21 @@
+profile: {{ .profile | default "desktop" }}
+
+profiles:
+  core-system:
+    description: "Core modules for all profiles"
+    modules:
+      - core
+      - terminal
+
+  desktop:
+    description: "Main desktop setup"
+    depends_on: [core-system]
+
+modules:
+  core
+    description: "Core system tools"
+    taga: [core]
+  
+  terminal:
+    description: "CLI tools"
+    tags: [core, cli]
