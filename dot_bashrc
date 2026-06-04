@@ -8,17 +8,25 @@
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
+if [[ -f "$HOME/.cache/wal/sequences" ]]; then
+    (cat $HOME/.cache/wal/sequences)
+fi
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
-# My aliases
-alias cm='chezmoi'
-alias ls='eza -l -h -a --smart-group --total-size --no-user --git'
-alias cat='bat'
-
-# Starship config
+# starship
 eval "$(starship init bash)"
 
-# Zoxide config
+# zoxide
 eval "$(zoxide init bash --cmd cd)"
 
-# Fzf config
-eval "$(fzf --bash)"
+# my aliases
+alias ls="eza -l -h -a --smart-group --total-size --no-user --git"
+alias cat="bat"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.cargo/env"
