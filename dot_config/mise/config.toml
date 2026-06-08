@@ -1,2 +1,4 @@
 [tools]
+"cargo:diesel_cli" = "latest"
 node = "24"
+rust = "latest"

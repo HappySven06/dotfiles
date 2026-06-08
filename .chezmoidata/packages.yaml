@@ -31,6 +31,10 @@ packages:
       development:
         - git
         - chezmoi
+        - mise
+        - postgresql-libs
+        - mariadb-libs
+        - sqlite
 
       desktop:
         - hyprland
