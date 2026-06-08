@@ -1,0 +1,62 @@
+packages:
+  linux-arch:
+    pacman:
+      system:
+        - base-devel
+        - efibootmgr
+        - networkmanager
+        - openssh
+        - power-profiles-daemon
+        - sudo
+        - upower
+        - zram-generator
+
+      shell:
+        - bat
+        - eza
+        - fzf
+        - starship
+        - zoxide
+
+      editors:
+        - helix
+        - micro
+
+      terminal:
+        - kitty
+        - btop
+        - lynx
+        - yazi
+
+      development:
+        - git
+        - chezmoi
+
+      desktop:
+        - hyprland
+        - greetd
+        - greetd-tuigreet
+        - mako
+        - quickshell
+        - wofy
+        - hyprpolkitagent
+        - wl-clipboard
+        - xdg-desktop-portal-hyprland
+
+      browsers:
+        - firefox
+
+      fonts:
+        - ttf-firacode-nerd
+
+      security:
+        - bitwarden
+        - bitwarden-cli
+
+    special:
+      aur-helper:
+        - yay
+
+    yay:
+      appearance:
+        - neofetch

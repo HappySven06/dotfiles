@@ -1,0 +1,32 @@
+{{ if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "arch") -}}
+#!/bin/bash
+
+set -e
+
+{{- $pacmanPackages := list }}
+
+{{- range $group, $pkgs := .packages.linux-arch.pacman }}
+    {{- range $pkgs }}
+        {{- $pacmanPackages = append $pacmanPackages . }}
+    {{- end }}
+{{- end }}
+
+sudo pacman -S --needed {{ join " " $pacmanPackages }}
+
+if ! command -v yay >/dev/null 2>&1; then
+    sudo pacman -S --needed git base-devel
+
+    git clone https://aur.archlinux.org/yay-bin.git
+    cd yay-bin
+    makepkg -si --noconfirm
+    cd ..
+    rm -rf yay-bin
+fi
+
+{{- range $group, $pkgs := .packages.linux-arch.yay }}
+    {{- range $pkgs }}
+yay -S --needed {{ . }}
+    {{- end }}
+{{- end }}
+
+{{ end -}}
